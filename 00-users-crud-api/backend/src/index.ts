@@ -1,9 +1,14 @@
-import { Hono } from 'hono'
+import { Hono } from 'hono';
+import usersRoute from './routes/usersRoute';
 
-const app = new Hono()
+const app = new Hono();
 
 app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+	return c.json({
+		message: 'Hi, this is my first API using hono.',
+	});
+});
 
-export default app
+app.route('/users', usersRoute);
+
+export default app;
