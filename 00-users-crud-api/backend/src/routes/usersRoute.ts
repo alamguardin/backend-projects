@@ -9,4 +9,34 @@ usersRoute.get('/', (c) => {
 	return c.json(data);
 });
 
+usersRoute.post('/', async (c) => {
+	const body = await c.req.json();
+	const newUser = { id: data.length + 1, ...body, create_at: Date.now() };
+	data.push(newUser);
+	await Bun.write(usersFile, JSON.stringify(data));
+	return c.json(newUser, 201);
+});
+
+usersRoute.put('/:id', async (c) => {
+	const idUser = Number(c.req.param('id'));
+	const indexUser = data.findIndex((user) => user.id === idUser);
+	if (indexUser === -1) c.text('User Not Found', 404);
+
+	const body = await c.req.json();
+	data[indexUser] = { id: idUser, ...body, create_at: Date.now() };
+	await Bun.write(usersFile, JSON.stringify(data));
+	console.log(data);
+	return c.json(data[indexUser]);
+});
+
+usersRoute.delete('/:id', async (c) => {
+	const idUser = Number(c.req.param('id'));
+	const indexUser = data.findIndex((user) => user.id === idUser);
+	if (indexUser === -1) return c.text('User not found', 404);
+
+	data.splice(indexUser, 1);
+	await Bun.write(usersFile, JSON.stringify(data));
+	return c.text('Deleted', 200);
+});
+
 export default usersRoute;
