@@ -31,6 +31,15 @@
 			"indentWidth": 4
 		}
 	},
+	"html": {
+		"formatter": {
+			"enabled": true,
+			"indentStyle": "tab",
+			"indentWidth": 4,
+			"attributePosition": "auto",
+			"bracketSameLine": true
+		}
+	},
 	"assist": {
 		"enabled": true,
 		"actions": {
