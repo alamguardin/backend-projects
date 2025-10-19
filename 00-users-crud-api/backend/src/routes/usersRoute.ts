@@ -13,8 +13,9 @@ usersRoute.get('/', (c) => {
 
 usersRoute.post('/', async (c) => {
 	const body = await c.req.json();
+	const newID = data[data.length - 1].id + 1;
 	const newUser = {
-		id: Date.now() + 1,
+		id: newID,
 		...body,
 		create_at: new Date().toISOString(),
 	};
@@ -35,7 +36,6 @@ usersRoute.put('/:id', async (c) => {
 		create_at: new Date().toISOString(),
 	};
 	await Bun.write(usersFile, JSON.stringify(data));
-	console.log(data);
 	return c.json(data[indexUser]);
 });
 

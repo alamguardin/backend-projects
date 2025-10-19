@@ -1,7 +1,7 @@
 import './style.css';
 
-async function getData() {
-	const url = 'http://localhost:3000';
+async function getUsersList() {
+	const url = 'http://localhost:3000/users';
 	try {
 		const response = await fetch(url);
 		if (!response.ok) throw new Error(response.status);
@@ -13,4 +13,4 @@ async function getData() {
 	}
 }
 
-getData();
+getUsersList();
