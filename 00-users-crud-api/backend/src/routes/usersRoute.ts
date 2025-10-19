@@ -6,12 +6,18 @@ const data = JSON.parse(await usersFile.text());
 const usersRoute = new Hono();
 
 usersRoute.get('/', (c) => {
+	if (data.length < 1) c.text('Not Users Available', 200);
+
 	return c.json(data);
 });
 
 usersRoute.post('/', async (c) => {
 	const body = await c.req.json();
-	const newUser = { id: data.length + 1, ...body, create_at: Date.now() };
+	const newUser = {
+		id: Date.now() + 1,
+		...body,
+		create_at: new Date().toISOString(),
+	};
 	data.push(newUser);
 	await Bun.write(usersFile, JSON.stringify(data));
 	return c.json(newUser, 201);
@@ -23,7 +29,11 @@ usersRoute.put('/:id', async (c) => {
 	if (indexUser === -1) c.text('User Not Found', 404);
 
 	const body = await c.req.json();
-	data[indexUser] = { id: idUser, ...body, create_at: Date.now() };
+	data[indexUser] = {
+		id: idUser,
+		...body,
+		create_at: new Date().toISOString(),
+	};
 	await Bun.write(usersFile, JSON.stringify(data));
 	console.log(data);
 	return c.json(data[indexUser]);
