@@ -65,38 +65,7 @@
 				<!-- Operations Record -->
 				<div class="title">USERS LIST</div>
 				<div id="recordList" class="cards-container">
-					<div class="card green">
-						<span class="card-method">GET</span>
-						<span class="card-message"
-							>Data received successfully</span
-						>
-					</div>
-					<div class="card blue">
-						<span class="card-method">POST</span>
-						<span class="card-message"
-							>User created succesfully</span
-						>
-					</div>
-					<div class="card yellow">
-						<span class="card-method">PUT</span>
-						<span class="card-message"
-							>User updated succesfully</span
-						>
-					</div>
-					<div class="card purple">
-						<span class="card-method">DELETE</span>
-						<span class="card-message"
-							>User deleted succesfully</span
-						>
-					</div>
-					<div class="card red">
-						<span class="card-method">ERROR</span>
-						<span class="card-message">User not found</span>
-					</div>
-					<div class="card">
-						<span class="card-method">200</span>
-						<span class="card-message">Default Response</span>
-					</div>
+					<!-- Records -->
 				</div>
 			</section>
 		</div>
@@ -107,6 +76,13 @@
 				<span class="card-name"></span>
 				<span class="card-email"></span>
 				<button class="card-button">DELETE</button>
+			</div>
+		</template>
+		<!-- Record Template Card -->
+		<template id="recordTemplateCard">
+			<div class="card">
+				<span class="card-method"></span>
+				<span class="card-message"></span>
 			</div>
 		</template>
 		<script type="module" src="/src/main.js"></script>
