@@ -13,6 +13,7 @@ async function getUsersList() {
 			method: 'GET',
 			message: 'Data received successfully',
 		});
+		console.log(result);
 		return result;
 	} catch (error) {
 		console.log(error.message);
@@ -28,7 +29,7 @@ async function setNewUser(name, email) {
 	try {
 		if (!name || !email) throw new Error('Not data');
 
-		const response = fetch(url, {
+		const response = await fetch(url, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -36,12 +37,14 @@ async function setNewUser(name, email) {
 			body: JSON.stringify({ name, email }),
 		});
 
+		const result = await response.json();
+
 		operationsRecord.push({
 			method: 'POST',
 			message: 'Created user successfully',
 		});
 
-		return await response.body;
+		return result;
 	} catch (error) {
 		console.log(error.message);
 		operationsRecord.push({
@@ -56,7 +59,7 @@ async function updateUser(id, name, email) {
 	try {
 		if (!name || !email) throw new Error('Not data');
 
-		const response = fetch(url, {
+		const response = await fetch(url, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
@@ -64,12 +67,14 @@ async function updateUser(id, name, email) {
 			body: JSON.stringify({ name, email }),
 		});
 
+		const result = await response.json();
+
 		operationsRecord.push({
 			method: 'PUT',
 			message: 'Updated user successfully',
 		});
 
-		return await response.body;
+		return result;
 	} catch (error) {
 		console.log(error.message);
 		operationsRecord.push({
@@ -83,10 +88,11 @@ const usersListElement = document.getElementById('usersList');
 const userCardTemplate = document.getElementById('userTemplateCard');
 
 async function renderUserList() {
+	usersListElement.innerHTML = '';
 	const usersList = await getUsersList();
 	const usersListFragment = new DocumentFragment();
 
-	for (const user of usersList) {
+	for (const user of await usersList) {
 		const clone = userCardTemplate.content.cloneNode(true);
 		const span = clone.querySelectorAll('span');
 		span[0].textContent = user.id;
@@ -106,6 +112,7 @@ const recordsListElement = document.getElementById('recordList');
 const recordCardTemplate = document.getElementById('recordTemplateCard');
 
 function updateRecordList() {
+	recordsListElement.innerHTML = '';
 	const recordsListFragment = new DocumentFragment();
 
 	for (const record of operationsRecord) {
@@ -150,10 +157,10 @@ createUserForm.addEventListener('submit', async (e) => {
 	const inputEmail = e.target[1].value.replace(' ', '');
 
 	await setNewUser(inputName, inputEmail);
+	await renderUserList();
 	updateRecordList();
 
-	e.target[0].value = '';
-	e.target[1].value = '';
+	e.target.reset();
 });
 
 const updateUserForm = document.getElementById('updateUserForm');
@@ -166,9 +173,8 @@ updateUserForm.addEventListener('submit', async (e) => {
 	const inputEmail = e.target[2].value.replace(' ', '');
 
 	await updateUser(inputId, inputName, inputEmail);
+	await renderUserList();
 	updateRecordList();
 
-	e.target[0].value = '';
-	e.target[1].value = '';
-	e.target[2].value = '';
+	e.target.reset();
 });
