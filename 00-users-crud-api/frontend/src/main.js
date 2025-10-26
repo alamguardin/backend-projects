@@ -84,6 +84,31 @@ async function updateUser(id, name, email) {
 	}
 }
 
+async function deleteUser(id) {
+	const url = `http://localhost:3000/users/${id}`;
+	try {
+		const response = await fetch(url, {
+			method: 'DELETE',
+		});
+
+		const result = response.text();
+
+		operationsRecord.push({
+			method: 'DELETE',
+			message: 'Deleted user successfully',
+		});
+
+		return result;
+	} catch (error) {
+		console.log(error.message);
+		operationsRecord.push({
+			method: 'ERROR',
+			message:
+				"Oh no! Something went wrong. The user couldn't be deleted.",
+		});
+	}
+}
+
 const usersListElement = document.getElementById('usersList');
 const userCardTemplate = document.getElementById('userTemplateCard');
 
@@ -98,6 +123,8 @@ async function renderUserList() {
 		span[0].textContent = user.id;
 		span[1].textContent = user.name;
 		span[2].textContent = user.email;
+
+		clone.querySelector('button').setAttribute('data-id', user.id);
 
 		usersListFragment.appendChild(clone);
 	}
@@ -177,4 +204,14 @@ updateUserForm.addEventListener('submit', async (e) => {
 	updateRecordList();
 
 	e.target.reset();
+});
+
+usersListElement.addEventListener('click', async (e) => {
+	if (e.target.classList.contains('card-button')) {
+		const userId = e.target.dataset.id;
+
+		await deleteUser(userId);
+		await renderUserList();
+		updateRecordList();
+	}
 });
